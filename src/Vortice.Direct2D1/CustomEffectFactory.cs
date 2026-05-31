@@ -123,6 +123,14 @@ internal class CustomEffectFactory
             PropertyType = propertyType;
             PropertyInfo = propertyInfo;
         }
+
+        protected static ID2D1EffectImplShadow ToShadow(IntPtr ptr)
+        {
+            unsafe
+            {
+                return (ID2D1EffectImplShadow)GCHandle.FromIntPtr(*(((IntPtr*)ptr) + 1)).Target!;
+            }
+        }
     }
 
     private class PropertyNative<U> : PropertyNativeBase where U : unmanaged
@@ -144,7 +152,9 @@ internal class CustomEffectFactory
         public static PropertyNativeBase? Create(PropertyInfo propertyInfo)
         {
             var type = propertyInfo.PropertyType;
-            if (type == typeof(int))
+            if (type == typeof(byte[]))
+                return new PropertyNativeBlob(propertyInfo);
+            else if (type == typeof(int))
                 return new PropertyNative<int>(propertyInfo, PropertyType.Int32);
             else if (type == typeof(uint))
                 return new PropertyNative<uint>(propertyInfo, PropertyType.UInt32);
@@ -209,12 +219,54 @@ internal class CustomEffectFactory
             return Result.Ok.Code;
         }
 
-        private ID2D1EffectImplShadow ToShadow(IntPtr ptr)
+    }
+
+    private class PropertyNativeBlob : PropertyNativeBase
+    {
+        public PropertyNativeBlob(PropertyInfo propertyInfo) : base(propertyInfo, PropertyType.Blob)
         {
-            unsafe
+            if (propertyInfo.CanWrite)
             {
-                return (ID2D1EffectImplShadow)GCHandle.FromIntPtr(*(((IntPtr*)ptr) + 1)).Target;
+                setterDelegate = new SetterDelegate(SetterImpl);
+                SetterPointer = Marshal.GetFunctionPointerForDelegate(setterDelegate);
             }
+            if (propertyInfo.CanRead)
+            {
+                getterDelegate = new GetterDelegate(GetterImpl);
+                GetterPointer = Marshal.GetFunctionPointerForDelegate(getterDelegate);
+            }
+        }
+
+        private int SetterImpl(IntPtr thisPtr, IntPtr dataPtr, int dataSize)
+        {
+            if (dataPtr == IntPtr.Zero)
+                return Result.Ok.Code;
+
+            var shadow = ToShadow(thisPtr);
+            var callback = (ID2D1EffectImpl)shadow.Callback;
+
+            var bytes = new byte[dataSize];
+            Marshal.Copy(dataPtr, bytes, 0, dataSize);
+            PropertyInfo.SetValue(callback, bytes);
+
+            return Result.Ok.Code;
+        }
+
+        private int GetterImpl(IntPtr thisPtr, IntPtr dataPtr, int dataSize, out int actualSize)
+        {
+            var shadow = ToShadow(thisPtr);
+            var callback = (ID2D1EffectImpl)shadow.Callback;
+
+            var bytes = (byte[]?)PropertyInfo.GetValue(callback);
+            actualSize = bytes?.Length ?? 0;
+
+            if (dataPtr == IntPtr.Zero || bytes is null)
+                return Result.Ok.Code;
+
+            if (dataSize >= bytes.Length)
+                Marshal.Copy(bytes, 0, dataPtr, bytes.Length);
+
+            return Result.Ok.Code;
         }
     }
 }

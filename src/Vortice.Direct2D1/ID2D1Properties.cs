@@ -32,6 +32,12 @@ public unsafe partial class ID2D1Properties
         SetValue(index, PropertyType.Int32, &value, sizeof(int));
     }
 
+    public void SetValue(int index, byte[] value)
+    {
+        fixed (byte* p = value)
+            SetValue(index, PropertyType.Blob, p, value.Length);
+    }
+
     public void SetValue(int index, Matrix3x2 value)
     {
         SetValue(index, PropertyType.Matrix3x2, &value, sizeof(Matrix3x2));
