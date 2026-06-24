@@ -10,7 +10,9 @@
     <Nullable>enable</Nullable>
 
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>CS1591;CS1701</NoWarn>
+    <!-- SharpGen生成コード・interop実装由来で実害のない警告を抑制 -->
+    <!-- CS系:コンパイラ警告 / SG系:SharpGenバインディング生成 / CA系:コード分析 -->
+    <NoWarn>CS1591;CS1701;CS0108;CS0465;CS0649;CS1574;CS8600;CS8602;CS8603;CS8604;CS8605;CS8618;CS8619;CS8625;CS8765;CS8767;SG0014;SG0019;CA1416;CA2022</NoWarn>
 
     <VersionPrefix>2.1.8</VersionPrefix>
     <VersionSuffix Condition="'$(VersionSuffix)' == ''">beta</VersionSuffix>
