@@ -43,12 +43,8 @@ namespace Vortice.MediaFoundation
         protected override unsafe void DisposeCore(IntPtr nativePointer, bool disposing)
         {
             base.DisposeCore(nativePointer, disposing);
-
-            if (_streamProxy != null)
-            {
-                _streamProxy.Dispose();
-                _streamProxy = null;
-            }
+            _streamProxy?.Dispose();
+            _streamProxy = null;
         }
 
         public uint Read(byte[] bRef, int offset, uint count)

@@ -163,11 +163,8 @@ public partial class IMMDevice
 
     private void DisposePropertyStore()
     {
-        if (_propertyStore != null)
-        {
-            _propertyStore.Dispose();
-            _propertyStore = null;
-        }
+        _propertyStore?.Dispose();
+        _propertyStore = null;
     }
 
     public override string ToString() => FriendlyName;

@@ -36,14 +36,8 @@ public partial class InfoQueueFilter
     internal void __MarshalTo(ref __Native @ref)
     {
         @ref.AllowList = default(InfoQueueFilterDescription.__Native);
-        if (AllowList != null)
-        {
-            AllowList.__MarshalTo(ref @ref.AllowList);
-        }
+        AllowList?.__MarshalTo(ref @ref.AllowList);
         @ref.DenyList = default(InfoQueueFilterDescription.__Native);
-        if (DenyList != null)
-        {
-            DenyList.__MarshalTo(ref @ref.DenyList);
-        }
+        DenyList?.__MarshalTo(ref @ref.DenyList);
     }
 }

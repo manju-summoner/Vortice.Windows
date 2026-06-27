@@ -42,11 +42,8 @@ public partial class GlyphRun : IDisposable
 
     public void Dispose()
     {
-        if (FontFace != null)
-        {
-            FontFace.Dispose();
-            FontFace = null;
-        }
+        FontFace?.Dispose();
+        FontFace = null;
     }
 
     #region Marshal
@@ -81,8 +78,7 @@ public partial class GlyphRun : IDisposable
     internal unsafe void __MarshalFrom(ref __Native @ref)
     {
         FontFace = (@ref.FontFace == IntPtr.Zero) ? null : new IDWriteFontFace(@ref.FontFace);
-        if (FontFace != null)
-            FontFace.AddRef();
+        FontFace?.AddRef();
 
         FontEmSize = @ref.FontEmSize;
         if (@ref.GlyphIndices != IntPtr.Zero)

@@ -102,10 +102,7 @@ public unsafe partial class IWICStream
 
     private void DisposeStreamProxy()
     {
-        if (_streamProxy != null)
-        {
-            _streamProxy.Dispose();
-            _streamProxy = null;
-        }
+        _streamProxy?.Dispose();
+        _streamProxy = null;
     }
 }

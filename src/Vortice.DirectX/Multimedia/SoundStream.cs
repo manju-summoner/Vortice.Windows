@@ -191,11 +191,8 @@ public class SoundStream : Stream
 
     protected override void Dispose(bool disposing)
     {
-        if (_input != null)
-        {
-            _input.Dispose();
-            _input = null;
-        }
+        _input?.Dispose();
+        _input = null;
         base.Dispose(disposing);
     }
 

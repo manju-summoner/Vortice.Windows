@@ -182,11 +182,8 @@ public unsafe class DataStream : Stream
     {
         if (disposing)
         {
-            if (_blob != null)
-            {
-                _blob.Dispose();
-                _blob = null;
-            }
+            _blob?.Dispose();
+            _blob = null;
         }
 
         if (_handle.IsAllocated)

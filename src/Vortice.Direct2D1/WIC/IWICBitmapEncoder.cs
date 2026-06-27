@@ -43,10 +43,7 @@ public partial class IWICBitmapEncoder
 
     private void DisposeWICStreamProxy()
     {
-        if (_wicStream != null)
-        {
-            _wicStream.Dispose();
-            _wicStream = null;
-        }
+        _wicStream?.Dispose();
+        _wicStream = null;
     }
 }

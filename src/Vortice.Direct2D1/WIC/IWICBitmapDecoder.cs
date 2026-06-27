@@ -16,10 +16,7 @@ namespace Vortice.WIC;
 
         private void DisposeWICStreamProxy()
         {
-            if (_wicStream != null)
-            {
-                _wicStream.Dispose();
-                _wicStream = null;
-            }
+        _wicStream?.Dispose();
+        _wicStream = null;
     }
 }
