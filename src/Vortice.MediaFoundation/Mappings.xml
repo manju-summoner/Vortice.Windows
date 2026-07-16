@@ -653,6 +653,10 @@
     <map interface="IMFAsyncCallback" callback="true" callback-dual="true" callback-visibility="public" autogen-shadow="true" callback-name="MFAsyncCallback" />
     <map method="IMFAsyncCallback::.*" property="false" hresult="true" check="false"/>
     <map param="IMFAsyncCallback::GetParameters::pdwFlags" type="MFASYNC_CALLBACK_FLAGS"/>
+
+    <!-- IMFSourceReaderCallback -->
+    <map interface="IMFSourceReaderCallback" callback="true" callback-dual="true" callback-visibility="public" autogen-shadow="true" callback-name="MFSourceReaderCallback" />
+    <map method="IMFSourceReaderCallback::.*" property="false" hresult="true" check="false"/>
     
     <!-- IMFAsyncCallback -->
     <map interface="IMFAsyncCallbackLogging" callback="true" callback-dual="true" callback-visibility="public" autogen-shadow="true" callback-name="MFAsyncCallbackLogging" />
