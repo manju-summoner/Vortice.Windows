@@ -51,21 +51,21 @@ public partial class ColorGlyphRun1
     public MeasuringMode MeasuringMode;
 
     #region Marshal
+    /// <remarks>
+    /// DWRITE_COLOR_GLYPH_RUN1 derives from DWRITE_COLOR_GLYPH_RUN in C++, so its own members start after
+    /// the full size of the base struct including its tail padding (glyphImageFormat is at offset 88 on x64, not 84).
+    /// Embedding the base struct reproduces that layout on every platform.
+    /// </remarks>
     [StructLayout(LayoutKind.Sequential, Pack = 0, CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
     internal unsafe struct __Native
     {
-        public GlyphRun.__Native GlyphRun;
-        public GlyphRunDescription.__Native* GlyphRunDescription;
-        public float BaselineOriginX;
-        public float BaselineOriginY;
-        public Color4 RunColor;
-        public ushort PaletteIndex;
+        public ColorGlyphRun.__Native Base;
         public GlyphImageFormats GlyphImageFormat;
         public MeasuringMode MeasuringMode;
 
         internal unsafe void __MarshalFree()
         {
-            GlyphRun.__MarshalFree();
+            Base.__MarshalFree();
         }
     }
 
@@ -77,22 +77,22 @@ public partial class ColorGlyphRun1
     internal unsafe void __MarshalFrom(ref __Native @ref)
     {
         GlyphRun = new GlyphRun();
-        GlyphRun.__MarshalFrom(ref @ref.GlyphRun);
+        GlyphRun.__MarshalFrom(ref @ref.Base.GlyphRun);
 
-        if (@ref.GlyphRunDescription == null)
+        if (@ref.Base.GlyphRunDescription == null)
         {
             GlyphRunDescription = null;
         }
         else
         {
             GlyphRunDescription = new GlyphRunDescription();
-            GlyphRunDescription.__MarshalFrom(ref *@ref.GlyphRunDescription);
+            GlyphRunDescription.__MarshalFrom(ref *@ref.Base.GlyphRunDescription);
         }
 
-        BaselineOriginX = @ref.BaselineOriginX;
-        BaselineOriginY = @ref.BaselineOriginY;
-        RunColor = @ref.RunColor;
-        PaletteIndex = @ref.PaletteIndex;
+        BaselineOriginX = @ref.Base.BaselineOriginX;
+        BaselineOriginY = @ref.Base.BaselineOriginY;
+        RunColor = @ref.Base.RunColor;
+        PaletteIndex = @ref.Base.PaletteIndex;
         GlyphImageFormat = @ref.GlyphImageFormat;
         MeasuringMode = @ref.MeasuringMode;
     }
